@@ -11,12 +11,6 @@ async function fetchData(url) {
   data = response;
 }
 
-// Fetch the JSON data 
-//jfetchData(url).then(() => {
-  // Log the data to the console
-//j  console.log("data =" ,data);
-//j});
-
 // Populate selector and build initial plots
 //
 // Use d3 to select the "selDataset" selector

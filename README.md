@@ -10,3 +10,7 @@ The web page allows one to select a subject ID.  For any given test subject, the
 * A gauge chart showing belly button washing frequency, as well as a pie chart representing the same data, but so as to match the sample impage provided.  
 
 The web page can be accessed at https://olearymd.github.io/belly-button-challenge/
+
+References:
+
+Hulcr, J. et al. (2012) A Jungle in There: Bacteria in Belly Buttons are Highly Diverse, but Predictable. Retrieved from: http://robdunnlab.com/projects/belly-button-biodiversity/results-and-data/ 

@@ -71,7 +71,9 @@ function buildMetadata(sample) {
   // Clear existing metadata
   panel.html("");
 
-  // Loop through each key-value pair and append to our "panel" d3 object
+  // Loop through each key-value pair and append to our "panel" d3 object.
+  // Uppercase the first letter in the text.  
+  //
   Object.entries(result).forEach(([key, value]) => {
     panel.append("h6").text(`${key.charAt(0).toUpperCase()}${key.slice(1)}:   ${value}`);
   });
@@ -161,7 +163,12 @@ function buildCharts(sample) {
   // Plot the data with Plotly
   Plotly.newPlot("bubble", bubbleTrace, bubbleLayout)
 
-  // Create a gauge chart plot the weekly washing frequency of the individual.
+  // Advanced Challenge Assignment (Optional)
+  //
+  // Adapt the Gauge Chart from https://plot.ly/javascript/gauge-charts/ to plot the weekly 
+  // washing frequency of the individual.  You will need to modify the example gauge code to 
+  // account for values ranging from 0 through 9.  Update the chart whenever a new sample is 
+  // selected.
   //
   // Get an array of the metadata
   var metadata = data.metadata;
@@ -192,7 +199,7 @@ function buildCharts(sample) {
     'rgba(131,181,136,255)'
   ]
   
-  // Define the 9 steps for the gauge, as well as they colord each step will use.  
+  // Define the 9 steps for the gauge, as well as the colors each step will use.  
   var steps = [];
   for (var i = 0; i < 9; i++) {
     steps.push({
@@ -262,9 +269,7 @@ function buildCharts(sample) {
         xref: 'x2',
         yref: 'y2',
         fillcolor: '850000',
-        line: {
-          color: '850000'
-        }
+        line: { color: '850000' }
       }
     ]
   };
@@ -277,11 +282,10 @@ function buildCharts(sample) {
 // Plot a second chart to better replicate the example found in the challenge.  
 // https://courses.bootcampspot.com/courses/2910/assignments/46944?submitted=2k
 // 
-// Note that the example provide in the assignment is not a gauge chart at all, and that a 
-// Plotly does not provide any gauge option which could be used to replicate the example.  
-// The example was actually made with a pie chart, with a few tricks used to make it look 
-// like a gauge.  
-
+// Note that the example provide in the assignment is not a gauge chart at all, and that 
+// Plotly does not provide any gauge options which could be used to replicate the example.  
+// The example was actually a pie chart, with a few tricks used to make it look like a gauge.  
+//
 // Calculate the needle point coordinates:
 var min = 0;
 var max = 9;
@@ -319,53 +323,60 @@ var colors = [
   'rgba(255,255,255,255)',
 ]
 
-// Create a 'Category' trace to more closely approximate the suggested solution, as the 'Gauge' 
-// trace doesn't offer a way to have text inside the arc.   
-//
 // Create a pie chart with the bottom half hidden.  Note that 'values', 'text' and 'labels' below 
 // have a hidden category.   https://plotly.com/javascript/pie-charts/ 
 //
-var pieTrace = [{ 
-  type: 'category',
-  x: [0], y:[0],
-  //marker: {size: 28, color:'850000'},
-  marker: {size: 24, color:'850000'},
-  showlegend: false,
-  name: 'scrubs per week',
-  text: wfreq,
-  hoverinfo: 'text+name'},
+var pieTrace = [
+  { // Create a big dot at point 0,0, so our needle looks more like the pointer used in the example:
+    type: 'category',
+    x: [0], y:[0],
+    marker: {size: 24, color:'850000'},
+    showlegend: false,
+    name: 'scrubs per week',
+    text: wfreq,
+    hoverinfo: 'text+name'
+  },
   { 
+    type: 'pie',
+    // This makes the pie look more like a gauge:
+    hole: .5,
     values: [2,2,2,2,2,2,2,2,2,18],
-    rotation: 90,
-    text: ['0-1', '1-2', '2-3', '3-4', '4-5', '5-6',  '6-7',  '7-8',  '8-9', ''],
-    textinfo: 'text',
-    textposition:'inside',      
-    marker: { colors },
     // This works by having a 'hidden' category that's not visitble:
     labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'white'],
-    hoverinfo: 'label',
+    text: ['0-1', '1-2', '2-3', '3-4', '4-5', '5-6',  '6-7',  '7-8',  '8-9', ''],
+    textinfo: 'text',
+    textposition:'inside',
+    rotation: 90,
+    marker: { colors },
+    hoverinfo: 'text',
     direction: 'clockwise',
-    hole: .5,
-    type: 'pie',
     showlegend: false
   }];
   
   var pieLayout = {
-    shapes:[{
-        type: 'path',
-        path: path,
-        fillcolor: '850000',
-        line: {
-          color: '850000'
-        }
-      }],
+    shapes:[ {
+      type: 'path',
+      path: path,
+      fillcolor: '850000',
+      line: { color: '850000' }
+    } ],
     title: { text: '<b>Belly Button Washing Frequency (Pie Chart)</b> <br>Scrubs Per Week' },
+    font: { size: 14 },
     height: 600,
     width: 600,
-    xaxis: {type:'category',zeroline:false, showticklabels:false,
-              showgrid: false, range: [-1, 1]},
-    yaxis: {type:'category',zeroline:false, showticklabels:false,
-              showgrid: false, range: [-1, 1]}
+    xaxis: {
+      type:'category',
+      zeroline: false, 
+      showticklabels: false,
+      showgrid: false, range: [-1, 1]
+    },
+    yaxis: {
+      type:'category',
+      zeroline: false, 
+      showticklabels: false,
+      showgrid: false, 
+      range: [-1, 1]
+    }
   };
 
   Plotly.newPlot('pie', pieTrace, pieLayout);
